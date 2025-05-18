@@ -1,5 +1,4 @@
 import mysql.connector
-from mysql.connector import errorcode
 
 DB_CONFIG = {
     'host': 'localhost',
@@ -18,6 +17,7 @@ def create_database():
         cursor = conn.cursor()
         cursor.execute("CREATE DATABASE IF NOT EXISTS smart_routes")
         conn.commit()
+        cursor.close()
     except mysql.connector.Error as err:
         print(f"Database creation failed: {err}")
     finally:
@@ -31,10 +31,12 @@ def create_table():
             CREATE TABLE IF NOT EXISTS highways (
                 city1 VARCHAR(100),
                 city2 VARCHAR(100),
-                distance INT
+                distance FLOAT,
+                PRIMARY KEY (city1, city2)
             )
         ''')
         conn.commit()
+        cursor.close()
     except mysql.connector.Error as err:
         print(f"Table creation failed: {err}")
     finally:
